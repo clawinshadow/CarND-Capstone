@@ -240,15 +240,16 @@ bool PurePursuit::verifyFollowing() const
   //ROS_ERROR("side diff : %lf , angle diff : %lf",displacement,relative_angle);
   if (displacement < displacement_threshold_ && relative_angle < relative_angle_threshold_)
   {
-    // ROS_INFO("Following : True");
+    //ROS_WARN("Following : True");
     return true;
   }
   else
   {
-    // ROS_INFO("Following : False");
+    //ROS_ERROR("Following : False");
     return false;
   }
 }
+  
 geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocity) const
 {
   // verify whether vehicle is following the path
@@ -257,15 +258,18 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
 
   geometry_msgs::Twist twist;
   twist.linear.x = cmd_velocity;
-  if (!following_flag)
-  {
-    //ROS_ERROR_STREAM("Not following");
-    twist.angular.z = current_velocity_.twist.linear.x * curvature;
-  }
-  else
-  {
-    twist.angular.z = prev_angular_velocity;
-  }
+  
+  twist.angular.z = current_velocity_.twist.linear.x * curvature;
+  
+//   if (!following_flag)
+//   {
+//     //ROS_ERROR_STREAM("Not following");
+//     twist.angular.z = current_velocity_.twist.linear.x * curvature;
+//   }
+//   else
+//   {
+//     twist.angular.z = prev_angular_velocity;
+//   }
 
   prev_angular_velocity = twist.angular.z;
   return twist;
